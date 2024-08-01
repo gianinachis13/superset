@@ -52,6 +52,20 @@ import {
 import { NATIVE_FILTER_DIVIDER_PREFIX } from '../nativeFilters/FiltersConfigModal/utils';
 import { findTabsWithChartsInScope } from '../nativeFilters/utils';
 import { getRootLevelTabsComponent } from './utils';
+import { css, styled } from '@superset-ui/core';
+
+const StyledButton = styled.button`
+  ${({ theme }) => css`
+
+    background-color: #041295;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    font-family: sans-serif;
+
+  `}
+`;
 
 type DashboardContainerProps = {
   topLevelTabs?: LayoutItem;
@@ -212,6 +226,9 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ topLevelTabs }) => {
           </Tabs>
         )}
       </ParentSize>
+      <StyledButton
+         className='buton'>Drill to detail
+      </StyledButton>
     </div>
   );
 };
