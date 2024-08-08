@@ -123,7 +123,7 @@ export default function DrillDetailModal({
           flex-direction: column;
         }
       `}
-      title={t('Drill to detail: %s', chartName)}
+      title={t('Drill to detail Build Test: %s', chartName)}
       footer={
         <ModalFooter exploreChart={exploreChart} canExplore={canExplore} />
       }
