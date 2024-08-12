@@ -583,46 +583,6 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
 
   return (
     <DashboardWrapper>
-      {showFilterBar &&
-        filterBarOrientation === FilterBarOrientation.Vertical && (
-          <>
-            <ResizableSidebar
-              id={`dashboard:${dashboardId}`}
-              enable={dashboardFiltersOpen}
-              minWidth={OPEN_FILTER_BAR_WIDTH}
-              maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
-              initialWidth={OPEN_FILTER_BAR_WIDTH}
-            >
-              {adjustedWidth => {
-                const filterBarWidth = dashboardFiltersOpen
-                  ? adjustedWidth
-                  : CLOSED_FILTER_BAR_WIDTH;
-                return (
-                  <FiltersPanel
-                    width={filterBarWidth}
-                    hidden={isReport}
-                    data-test="dashboard-filters-panel"
-                  >
-                    <StickyPanel ref={containerRef} width={filterBarWidth}>
-                      <ErrorBoundary>
-                        <FilterBar
-                          orientation={FilterBarOrientation.Vertical}
-                          verticalConfig={{
-                            filtersOpen: dashboardFiltersOpen,
-                            toggleFiltersBar: toggleDashboardFiltersOpen,
-                            width: filterBarWidth,
-                            height: filterBarHeight,
-                            offset: filterBarOffset,
-                          }}
-                        />
-                      </ErrorBoundary>
-                    </StickyPanel>
-                  </FiltersPanel>
-                );
-              }}
-            </ResizableSidebar>
-          </>
-        )}
       <StyledHeader ref={headerRef}>
         {/* @ts-ignore */}
         <Droppable
@@ -706,6 +666,49 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
               <Loading />
             )}
             {editMode && <BuilderComponentPane topOffset={barTopOffset} />}
+            {showFilterBar &&
+              filterBarOrientation === FilterBarOrientation.Vertical && (
+                <>
+                  <ResizableSidebar
+                    id={`dashboard:${dashboardId}`}
+                    enable={dashboardFiltersOpen}
+                    minWidth={OPEN_FILTER_BAR_WIDTH}
+                    maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
+                    initialWidth={OPEN_FILTER_BAR_WIDTH}
+                  >
+                    {adjustedWidth => {
+                      const filterBarWidth = dashboardFiltersOpen
+                        ? adjustedWidth
+                        : CLOSED_FILTER_BAR_WIDTH;
+                      return (
+                        <FiltersPanel
+                          width={filterBarWidth}
+                          hidden={isReport}
+                          data-test="dashboard-filters-panel"
+                        >
+                          <StickyPanel
+                            ref={containerRef}
+                            width={filterBarWidth}
+                          >
+                            <ErrorBoundary>
+                              <FilterBar
+                                orientation={FilterBarOrientation.Vertical}
+                                verticalConfig={{
+                                  filtersOpen: dashboardFiltersOpen,
+                                  toggleFiltersBar: toggleDashboardFiltersOpen,
+                                  width: filterBarWidth,
+                                  height: filterBarHeight,
+                                  offset: filterBarOffset,
+                                }}
+                              />
+                            </ErrorBoundary>
+                          </StickyPanel>
+                        </FiltersPanel>
+                      );
+                    }}
+                  </ResizableSidebar>
+                </>
+              )}
           </StyledDashboardContent>
         </DashboardContentWrapper>
       </StyledContent>
