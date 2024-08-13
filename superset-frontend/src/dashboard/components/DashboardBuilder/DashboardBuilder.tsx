@@ -81,6 +81,8 @@ import { getRootLevelTabsComponent, shouldFocusTabs } from './utils';
 import DashboardContainer from './DashboardContainer';
 import { useNativeFilters } from './state';
 import DashboardWrapper from './DashboardWrapper';
+import Button from 'src/components/Button';
+import { useHistory } from 'react-router-dom';
 
 type DashboardBuilderProps = {};
 
@@ -277,6 +279,12 @@ const DashboardContentWrapper = styled.div`
       }
     }
   `}
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    margin-right: 260px
+  }
 `;
 
 const StyledDashboardContent = styled.div<{
@@ -374,7 +382,7 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
   const dispatch = useDispatch();
   const uiConfig = useUiConfig();
   const theme = useTheme();
-
+  const history = useHistory();
   const dashboardId = useSelector<RootState, string>(
     ({ dashboardInfo }) => `${dashboardInfo.id}`,
   );
@@ -581,6 +589,10 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
       ? 0
       : theme.gridUnit * 8;
 
+      const handleClick = () => {
+        history.push(`/superset/dashboard/11/?standalone=2`);
+      }
+
   return (
     <DashboardWrapper>
       <StyledHeader ref={headerRef}>
@@ -671,10 +683,10 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                 <>
                   <ResizableSidebar
                     id={`dashboard:${dashboardId}`}
-                    enable={dashboardFiltersOpen}
-                    minWidth={OPEN_FILTER_BAR_WIDTH}
-                    maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
-                    initialWidth={OPEN_FILTER_BAR_WIDTH}
+                    enable={false}   //TODO: GIANINA{dashboardFiltersOpen}
+                    minWidth={0}     //{OPEN_FILTER_BAR_WIDTH}
+                    maxWidth={0}      //{OPEN_FILTER_BAR_MAX_WIDTH}
+                    initialWidth={0}  //{OPEN_FILTER_BAR_WIDTH}
                   >
                     {adjustedWidth => {
                       const filterBarWidth = dashboardFiltersOpen
@@ -710,6 +722,16 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                 </>
               )}
           </StyledDashboardContent>
+          <div className="btn-container">
+            <Button className="proceed-btn" buttonStyle="tertiary" onClick={handleClick}>
+              {t('Drill to detail')}
+            </Button>
+
+     
+            <Button className="proceed-btn" buttonStyle="tertiary">
+              {t('Drill through')}
+            </Button>
+          </div>
         </DashboardContentWrapper>
       </StyledContent>
       {dashboardIsSaving && (

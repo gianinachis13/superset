@@ -102,7 +102,7 @@ def init_app(app):
 
 CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 TALISMAN_ENABLED = False
-FEATURE_FLAGS = {"DASHBOARD_RBAC": True}
+FEATURE_FLAGS = {"DASHBOARD_RBAC": True, "EMBEDDED_SUPERSET": True,}
 
 
 
