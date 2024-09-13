@@ -45,7 +45,7 @@ class CustomAuthDBView(AuthDBView):
                 json_string = json.dumps(payload)
                 data_dict_from_json = json.loads(json_string)
                 user_email = data_dict_from_json["preferred_username"]
-                # user_email = 'blablabla@gmail.com'
+                # user_email = 'fr@superset.com'
                 if user_id:
                     print("User id****", user_id)
 
@@ -80,7 +80,7 @@ class CustomAuthDBView(AuthDBView):
                     login_user(user, remember=False, force=True)
 
                     if dashboard_id:
-                        return redirect(f'/superset/dashboard/{dashboard_id}/?standalone=2')
+                        return redirect(f"/superset/dashboard/17/?standalone=2&native_filters=(NATIVE_FILTER-IwP3UoITy:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-IwP3UoITy,ownState:()),NATIVE_FILTER-u1GGvp9x5:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-u1GGvp9x5,ownState:()),NATIVE_FILTER-NBvj62O7J:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-NBvj62O7J,ownState:()),NATIVE_FILTER-kIQUyvdyT:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-kIQUyvdyT,ownState:()))")
                     return redirect(self.appbuilder.get_url_for_index)
 
             flash('Unable to auto login', 'warning')
@@ -102,7 +102,7 @@ def init_app(app):
 
 CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 TALISMAN_ENABLED = False
-FEATURE_FLAGS = {"DASHBOARD_RBAC": True, "EMBEDDED_SUPERSET": True,}
+FEATURE_FLAGS = {"DASHBOARD_RBAC": True, "EMBEDDED_SUPERSET": True, "DASHBOARD_FILTERS_EXPERIMENTAL": True, "DASHBOARD_NATIVE_FILTERS_SET": True, "DASHBOARD_NATIVE_FILTERS": True, "DASHBOARD_CROSS_FILTERS": True, "ENABLE_TEMPLATE_PROCESSING": True}
 
 
 

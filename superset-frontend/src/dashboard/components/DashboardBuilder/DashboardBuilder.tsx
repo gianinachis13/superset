@@ -590,7 +590,7 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
       : theme.gridUnit * 8;
 
       const handleClick = () => {
-        history.push(`/superset/dashboard/11/?standalone=2`);
+        history.push(`/superset/dashboard/18/?standalone=2&native_filters=(NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG,ownState:()),NATIVE_FILTER-mU1EeouOilfqaYJ_---ur:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-mU1EeouOilfqaYJ_---ur,ownState:()),NATIVE_FILTER-N3WaSjc400SSFceV37xJy:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-N3WaSjc400SSFceV37xJy,ownState:()),NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9,ownState:()))`);
       }
 
   return (
