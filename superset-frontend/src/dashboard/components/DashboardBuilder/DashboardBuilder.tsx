@@ -283,8 +283,17 @@ const DashboardContentWrapper = styled.div`
   .btn-container {
     display: flex;
     justify-content: center;
-    margin-right: 260px
+    margin-right: 30px;
+    margin-bottom: 30px;
+    margin-left: auto;
+
+      .superset-button {
+    color: white;
+    border: none;
+    background-color: #070061 !important;
   }
+  }
+
 `;
 
 const StyledDashboardContent = styled.div<{
@@ -589,12 +598,66 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
       ? 0
       : theme.gridUnit * 8;
 
-      const handleClick = () => {
-        history.push(`/superset/dashboard/18/?standalone=2&native_filters=(NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG,ownState:()),NATIVE_FILTER-mU1EeouOilfqaYJ_---ur:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-mU1EeouOilfqaYJ_---ur,ownState:()),NATIVE_FILTER-N3WaSjc400SSFceV37xJy:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-N3WaSjc400SSFceV37xJy,ownState:()),NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9,ownState:()))`);
-      }
+  const handleClick = () => {
+    history.push(
+      `/superset/dashboard/18/?standalone=2&native_filters=(NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG,ownState:()),NATIVE_FILTER-mU1EeouOilfqaYJ_---ur:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-mU1EeouOilfqaYJ_---ur,ownState:()),NATIVE_FILTER-N3WaSjc400SSFceV37xJy:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-N3WaSjc400SSFceV37xJy,ownState:()),NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9,ownState:()))`,
+    );
+  };
+
+  const CustomFilterHorizontal = ({p1, p2}:{p1:string, p2:string}) => {
+    return (
+      <div>
+        {p1}
+      </div>
+    )
+  }
+
 
   return (
     <DashboardWrapper>
+      {showFilterBar &&
+        filterBarOrientation === FilterBarOrientation.Vertical && (
+          <>
+            <ResizableSidebar
+              id={`dashboard:${dashboardId}`}
+              enable={dashboardFiltersOpen}
+              minWidth={OPEN_FILTER_BAR_WIDTH}
+              maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
+              initialWidth={OPEN_FILTER_BAR_WIDTH}
+            >
+              {adjustedWidth => {
+                const filterBarWidth = dashboardFiltersOpen
+                  ? adjustedWidth
+                  : CLOSED_FILTER_BAR_WIDTH;
+                return (
+                  <FiltersPanel
+                    width={filterBarWidth}
+                    hidden={isReport}
+                    data-test="dashboard-filters-panel"
+               
+                  >
+                    <StickyPanel ref={containerRef} width={filterBarWidth}>
+                      <ErrorBoundary>
+                        <FilterBar
+                        
+                       
+                          orientation={FilterBarOrientation.Vertical}
+                          verticalConfig={{
+                            filtersOpen: dashboardFiltersOpen,
+                            toggleFiltersBar: toggleDashboardFiltersOpen,
+                            width: filterBarWidth,
+                            height: filterBarHeight,
+                            offset: filterBarOffset,
+                          }}
+                        />
+                      </ErrorBoundary>
+                    </StickyPanel>
+                  </FiltersPanel>
+                );
+              }}
+            </ResizableSidebar>
+          </>
+        )}
       <StyledHeader ref={headerRef}>
         {/* @ts-ignore */}
         <Droppable
@@ -672,66 +735,26 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                   />
                 </div>
               ) : (
-                <DashboardContainer topLevelTabs={topLevelTabs} />
+                <DashboardContainer topLevelTabs={topLevelTabs} customFilterHorizontal={<CustomFilterHorizontal p1='test' p2='test2'></CustomFilterHorizontal>} />
               )
             ) : (
               <Loading />
             )}
             {editMode && <BuilderComponentPane topOffset={barTopOffset} />}
-            {showFilterBar &&
-              filterBarOrientation === FilterBarOrientation.Vertical && (
-                <>
-                  <ResizableSidebar
-                    id={`dashboard:${dashboardId}`}
-                    enable={false}   //TODO: GIANINA{dashboardFiltersOpen}
-                    minWidth={0}     //{OPEN_FILTER_BAR_WIDTH}
-                    maxWidth={0}      //{OPEN_FILTER_BAR_MAX_WIDTH}
-                    initialWidth={0}  //{OPEN_FILTER_BAR_WIDTH}
-                  >
-                    {adjustedWidth => {
-                      const filterBarWidth = dashboardFiltersOpen
-                        ? adjustedWidth
-                        : CLOSED_FILTER_BAR_WIDTH;
-                      return (
-                        <FiltersPanel
-                          width={filterBarWidth}
-                          hidden={isReport}
-                          data-test="dashboard-filters-panel"
-                        >
-                          <StickyPanel
-                            ref={containerRef}
-                            width={filterBarWidth}
-                          >
-                            <ErrorBoundary>
-                              <FilterBar
-                                orientation={FilterBarOrientation.Vertical}
-                                verticalConfig={{
-                                  filtersOpen: dashboardFiltersOpen,
-                                  toggleFiltersBar: toggleDashboardFiltersOpen,
-                                  width: filterBarWidth,
-                                  height: filterBarHeight,
-                                  offset: filterBarOffset,
-                                }}
-                              />
-                            </ErrorBoundary>
-                          </StickyPanel>
-                        </FiltersPanel>
-                      );
-                    }}
-                  </ResizableSidebar>
-                </>
-              )}
           </StyledDashboardContent>
-          <div className="btn-container">
-            <Button className="proceed-btn" buttonStyle="tertiary" onClick={handleClick}>
+          {
+            window.location.pathname.includes('17') && !editMode &&
+            <div className="btn-container">
+            <Button
+              className="proceed-btn"
+              buttonStyle="tertiary"
+              onClick={handleClick}
+            >
               {t('Drill to detail')}
             </Button>
-
-     
-            <Button className="proceed-btn" buttonStyle="tertiary">
-              {t('Drill through')}
-            </Button>
           </div>
+          }
+          
         </DashboardContentWrapper>
       </StyledContent>
       {dashboardIsSaving && (

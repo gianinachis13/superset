@@ -618,19 +618,17 @@ COMMON_BOOTSTRAP_OVERRIDES_FUNC: Callable[  # noqa: E731
 
 # EXTRA_CATEGORICAL_COLOR_SCHEMES is used for adding custom categorical color schemes
 # example code for "My custom warm to hot" color scheme
-# EXTRA_CATEGORICAL_COLOR_SCHEMES = [
-#     {
-#         "id": 'myVisualizationColors',
-#         "description": '',
-#         "label": 'My Visualization Colors',
-#         "isDefault": True,
-#         "colors":
-#          ['#006699', '#009DD9', '#5AAA46', '#44AAAA', '#DDAA77', '#7799BB', '#88AA77',
-#          '#552288', '#5AAA46', '#CC7788', '#EEDD55', '#9977BB', '#BBAA44', '#DDCCDD']
-#     }]
-
+EXTRA_CATEGORICAL_COLOR_SCHEMES = [
+    {
+        "id": 'myVisualizationColors',
+        "description": '',
+        "label": 'My Visualization Colors',
+        "isDefault": True,
+        "colors":
+         ['#178244', '#178244', '#E01E00']
+    }]
 # This is merely a default
-EXTRA_CATEGORICAL_COLOR_SCHEMES: list[dict[str, Any]] = []
+# EXTRA_CATEGORICAL_COLOR_SCHEMES: list[dict[str, Any]] = []
 
 # THEME_OVERRIDES is used for adding custom theme to superset
 # example code for "My theme" custom scheme

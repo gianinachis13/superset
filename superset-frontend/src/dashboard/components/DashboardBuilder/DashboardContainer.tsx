@@ -18,7 +18,7 @@
  */
 // ParentSize uses resize observer so the dashboard will update size
 // when its container size changes, due to e.g., builder side panel opening
-import { FC, useEffect, useMemo, useRef } from 'react';
+import { FC, ReactElement, useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Filter,
@@ -55,6 +55,7 @@ import { getRootLevelTabsComponent } from './utils';
 
 type DashboardContainerProps = {
   topLevelTabs?: LayoutItem;
+  customFilterHorizontal?: ReactElement;
 };
 
 const useNativeFilterScopes = () => {
@@ -72,7 +73,7 @@ const useNativeFilterScopes = () => {
   );
 };
 
-const DashboardContainer: FC<DashboardContainerProps> = ({ topLevelTabs }) => {
+const DashboardContainer: FC<DashboardContainerProps> = ({ topLevelTabs, customFilterHorizontal }) => {
   const nativeFilterScopes = useNativeFilterScopes();
   const dispatch = useDispatch();
 
@@ -165,6 +166,11 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ topLevelTabs }) => {
 
   return (
     <div className="grid-container" data-test="grid-container">
+      {customFilterHorizontal && customFilterHorizontal}
+     {/* <div>Aici imi trebuie un customFilterBar (trebuie sa fie inclus la fel cum este includ din DashboardBuilder.jsx Horizaontal.tsx - componenta de a noastra -  aici ) 
+      Aici voi intoarce doar Services and Roles, restul vor fi excluse 
+      
+      </div>  */}
       <ParentSize>
         {({ width }) => (
           /*
@@ -173,6 +179,7 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ topLevelTabs }) => {
             the entire dashboard upon adding/removing top-level tabs, which would otherwise
             happen because of React's diffing algorithm
           */
+          
           <Tabs
             id={DASHBOARD_GRID_ID}
             activeKey={activeKey}
