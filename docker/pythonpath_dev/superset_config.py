@@ -7,6 +7,10 @@ import jwt
 import json
 from jwt import PyJWKClient
 import base64
+import requests
+import json
+import requests
+
 
 # Function to decode URL-safe base64 encoded strings
 def decode(encoded_string: str) -> str:
@@ -26,8 +30,11 @@ class CustomAuthDBView(AuthDBView):
     def login(self):
         print("Login endpoint hit")  # Debugging
         token = request.args.get('token')
-        # token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1HTHFqOThWTkxvWGFGZnBKQ0JwZ0I0SmFLcyJ9.eyJhdWQiOiJkOWJmNTYwZC01MDJlLTQzNTEtYWRjZi0wOGZjNWQwYzk2NDMiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNmU2MDMyODktNWU0Ni00ZTI2LWFjN2MtMDNhODU0MjBhOWE1L3YyLjAiLCJpYXQiOjE3MjIzMzQ4NTQsIm5iZiI6MTcyMjMzNDg1NCwiZXhwIjoxNzIyMzM4NzU0LCJhaW8iOiJBVlFBcS84WEFBQUFBOU9LaWJLK1ZrRHRjUVdtQ29iNG10TDRkRkhFbXRoVmxaTlFVdFNlbFlLRG9BeUVYZlRuUWsvTWxXcUZOK3g4M0R5b2ZoUVkvTGtncmpsN1AyRXpTTXJHUXgwVGpjR0FmT0RsVUMyRXhxMD0iLCJuYW1lIjoiQ0lSSkFOIElvbnV0LVJhenZhbiIsIm5vbmNlIjoiYzU3YTZjMjYtNGZhZC00MGUyLTk0ZmYtYjc4NjFhZWQxMTMyIiwib2lkIjoiNjZjYTgzOTEtNDYzYy00MTE4LTkyZTYtZDIzOGVkOGUyY2JlIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaW9udXQtcmF6dmFuLmNpcmphbkB0aGFsZXNncm91cC5jb20iLCJyaCI6IjAuQVNFQWlUSmdia1plSms2c2ZBT29WQ0NwcFExV3Y5a3VVRkZEcmM4SV9GME1sa01oQURFLiIsInN1YiI6ImZocC1xa1ktZ2g2S3ByTzh0bUNqNUxiQmJFcVlmUXhyRFJQMEc0dUdObkEiLCJ0aWQiOiI2ZTYwMzI4OS01ZTQ2LTRlMjYtYWM3Yy0wM2E4NTQyMGE5YTUiLCJ1dGkiOiJGRlN6emRfMkdVS2VnYWZUU3E4U0FBIiwidmVyIjoiMi4wIn0.dw6i0WMe6HYSAhmmgjOvwRUWk7gQ3tHBC6xRPe23viX5ZkyvPl03MdOv3YYnGLFQZfV9x5vhf--U8ZLiXSBO3-ntJ3pez1n59JruZAF81e7KDmWZOeuV5a1Cl9pkwacyXyXYwtkBQblVSfbiFvYIXY-2R1GLQBduiuDz_l5Qlic6wSRImJIQjX2aFMU2kUkwngq_C_HcERLAOBYaPQQx12MewU1TXOYvbrG9aSh2tebpPzvn5vDYb9O3ZiUOSfrxSc5mx_0h5wdV8jh90oVyCzR2XFzk_31m3tMy3BA5axPY89cW_CsmdaJuhLaIfwVlFjQoLKYETnmRJOz8IeUwAg'
+        # token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ikg5bmo1QU9Tc3dNcGhnMVNGeDdqYVYtbEI5dyJ9.eyJhdWQiOiJkOWJmNTYwZC01MDJlLTQzNTEtYWRjZi0wOGZjNWQwYzk2NDMiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNmU2MDMyODktNWU0Ni00ZTI2LWFjN2MtMDNhODU0MjBhOWE1L3YyLjAiLCJpYXQiOjE3MjcxODI5ODEsIm5iZiI6MTcyNzE4Mjk4MSwiZXhwIjoxNzI3MTg2ODgxLCJhaW8iOiJBVlFBcS84WEFBQUFIaGsrSlVwMWRteFYyTGZKazlJbEpyaWZVMlZEMy8waXVEY0pLcXlBVk1lT1pSSmpXdnAwOWd4dGp0cllGU2pNZHduSDBROC9kWUJyM1h5WXdpbzNjTGJoRjNBTzBxVGlidEdXci9kN3o1ND0iLCJuYW1lIjoiQ0hJUyBHaWFuaW5hLUFsaW5hIiwibm9uY2UiOiI5MmUwMmQ1MS1hOTI2LTQzYzYtYTgyMS03NWY3ZWFhN2ZhMjAiLCJvaWQiOiJmNTEwOWQxNi1iMzY2LTQxZTUtODQ4NS04NWRkZTYzYmYzY2YiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJnaWFuaW5hLmNoaXNAdGhhbGVzZ3JvdXAuY29tIiwicmgiOiIwLkFTRUFpVEpnYmtaZUprNnNmQU9vVkNDcHBRMVd2OWt1VUZGRHJjOElfRjBNbGtNaEFERS4iLCJzdWIiOiJrdS1PZTBFX29CM25RSDRIUmRaRmVkelUxUXV2eHc3dUdZYXh3ZlhPUm5vIiwidGlkIjoiNmU2MDMyODktNWU0Ni00ZTI2LWFjN2MtMDNhODU0MjBhOWE1IiwidXRpIjoiX1dLLVpvZ0NERWlVSUZZNVhkTk5BQSIsInZlciI6IjIuMCJ9.ZO6L8I9D3T3P3p9F630quW2B6rfKAuxEY3UYoKz_068H6b1Rtyk5IR-QQkFaKXg4Isb3sBIhrQDbDZaGqKjy5PQO0mggoFjnwMrNrbmwZwuRkGmSQ5IlGRyoDgkAf4ezVHi7SEwAddHvrwxcnzYsxhPLJmdGOwZyJ2ukIHrk7fdlHtYNA1D6QxLoaWFhrgclfniLBwv1wE_JvDcDs4cVjWuvoLVXwfRwPh1ZsFTeZ2NibpbqgjjBXOcuhL-fPgsMcuGwquihgKf28-DY6KXOugicOQV_WEzf881e56a_AtH34OgWszG8DRZga9iJDvO5RK4PP24wabSSKigMyH1i6w'
         dashboard_id = request.args.get('dashboard_id')
+        country_str = request.args.get('country_str')
+        gbu_str = request.args.get('gbu_str')
+        print("country_str",country_str)
         sm = self.appbuilder.sm
         session = sm.get_session
 
@@ -47,39 +54,66 @@ class CustomAuthDBView(AuthDBView):
                 user_email = data_dict_from_json["preferred_username"]
                 # user_email = 'fr@superset.com'
                 if user_id:
+                    print("U:{token}")
                     print("User id****", user_id)
-
                     # Fetch user from the database or create a new user if not exists
-                    user = session.query(sm.user_model).filter_by(email=user_email).first()
+                    url = "https://dev.emw-mvp.prod-eu2.k8saas.thalesdigital.io/api/v1/emw/user/userInfo"
+                    print("Url", url)
+                    body = {}
+                    headers = {
+                    'Authorization': f'Bearer {token}',
+                    'Cookie': 'SBSESSIONID=9D25239A653CC72A079E2037EFDDA549'
+                    }
+                    response = requests.get(url, headers=headers)
+                    print("RESPP",response.status_code)
+                    if response.status_code == 200:
+                        response_json = response.json()
+                        print("Response JSON:", json.dumps(response_json, indent=4))
+                        user_tgi = response_json['data']['tgi']
+                        print("User TGI:", user_tgi)
+                        user_roles = response_json['data']['role']
+                        print("User roles*:", user_roles)
+                    else:
+                        print("Error fetching user data:", response.status_code)
+                    user = session.query(sm.user_model).filter_by(username=user_roles).first()
+              
 
-                    if not user:
-                        # Create a new user if not exists (this is just an example)
-                        user = sm.user_model()
-                        user.username = 'test2'
-                        user.email = user_email
-                        user.first_name = 'Test2'
-                        user.last_name = 'User2'
-                        user.password = 'public'  # Set a default password; this should be hashed in production
-                        user.is_active = True # Check with 0 or 1
-                        session.add(user)
-                        session.commit()
+                                        # if not user:
+                                        #     # CURL APELAM API - DACA NU e expirat token-ul? 
+                                        #     # call spre EMW API (doar token-ul il trimit) primesc short user, adaug user-ul in baza de date a superset-ului (unul cate unul)
+                                        #     # pe prima pagina in filtre selectam doar organizatia user-ului (vor fi vizibile toate tarile), in drill to detail restrictinam tot(vedem doar tara gbu, bl, cc in care sunt eu)
+                                        #     # Create a new user if not exists (this is just an example)
+                                        #     user = sm.user_model()
+                                        #     user.username = 'test2'
+                                        #     user.email = user_email
+                                        #     user.first_name = 'Test2'
+                                        #     user.last_name = 'User2'
+                                        #     user.password = 'public'  # Set a default password; this should be hashed in production
+                                        #     # sa fie login numai cu token (sa dezactivez pagina de login)
+                                        #     user.is_active = True # Check with 0 or 1
+                                        #     session.add(user)
+                                        #     session.commit()
 
-                    # Assign roles based on the token information
-                    role = session.query(sm.role_model).filter_by(name='Gamma').first()
-                    print("role", role)
-                    if not role:
-                        # Create a new role if not exists (this is just an example)
-                        role = sm.role_model(name='Gamma')
-                        session.add(role)
-                        session.commit()
+                                        # # Assign roles based on the token information
+                                        # role = session.query(sm.role_model).filter_by(name=user_roles).first()
+                                        # print("role", role)
+                                        # if not role:
+                                        #     # Create a new role if not exists (this is just an example) Ionut imi intoarce numele roluluiu
+                                        #     role = sm.role_model(name=user_roles)
+                                        #     session.add(role)
+                                        #     session.commit()
 
-                    # Assign role to user
-                    user.roles.append(role)
-                    session.commit()
-                    print("user", user)
+                                        # # Assign role to user
+                                        # user.roles.append(role)
+                                        # session.commit()
+                
                     login_user(user, remember=False, force=True)
 
+        
                     if dashboard_id:
+                        # bl_str = 'VTS'
+                        # cc_str= 'LAS/VTS-FR'
+                        # return redirect(f"/superset/dashboard/17/?standalone=2&native_filters=(NATIVE_FILTER-DLuziU6vb-LTinkr1pCrF:(__cache:(label:!({country_str}),validateStatus:!f,value:!({country_str})),extraFormData:(filters:!((col:country,op:IN,val:!({country_str})))),filterState:(label:!({country_str}),validateStatus:!f,value:!({country_str})),id:NATIVE_FILTER-DLuziU6vb-LTinkr1pCrF,ownState:()),NATIVE_FILTER-HIwSbdASjRqnj5W1CE0yz_:(__cache:(label:!('{gbu_str}'),validateStatus:!f,value:!('{gbu_str}')),extraFormData:(filters:!((col:gbu,op:IN,val:!('{gbu_str}')))),filterState:(label:!('{gbu_str}'),validateStatus:!f,value:!('{gbu_str}')),id:NATIVE_FILTER-HIwSbdASjRqnj5W1CE0yz_,ownState:()),NATIVE_FILTER-NBvj62O7J:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-NBvj62O7J,ownState:()),NATIVE_FILTER-kIQUyvdyT:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-kIQUyvdyT,ownState:()))")
                         return redirect(f"/superset/dashboard/17/?standalone=2&native_filters=(NATIVE_FILTER-IwP3UoITy:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-IwP3UoITy,ownState:()),NATIVE_FILTER-u1GGvp9x5:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-u1GGvp9x5,ownState:()),NATIVE_FILTER-NBvj62O7J:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-NBvj62O7J,ownState:()),NATIVE_FILTER-kIQUyvdyT:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-kIQUyvdyT,ownState:()))")
                     return redirect(self.appbuilder.get_url_for_index)
 
@@ -102,7 +136,8 @@ def init_app(app):
 
 CUSTOM_SECURITY_MANAGER = CustomSecurityManager
 TALISMAN_ENABLED = False
-FEATURE_FLAGS = {"DASHBOARD_RBAC": True, "EMBEDDED_SUPERSET": True, "DASHBOARD_FILTERS_EXPERIMENTAL": True, "DASHBOARD_NATIVE_FILTERS_SET": True, "DASHBOARD_NATIVE_FILTERS": True, "DASHBOARD_CROSS_FILTERS": True, "ENABLE_TEMPLATE_PROCESSING": True}
+FEATURE_FLAGS = {"DASHBOARD_RBAC": True, "EMBEDDED_SUPERSET": True, "DASHBOARD_FILTERS_EXPERIMENTAL": True,
+                 "DASHBOARD_NATIVE_FILTERS": True, "DASHBOARD_CROSS_FILTERS": True, "ENABLE_TEMPLATE_PROCESSING": True, }
 
 
 

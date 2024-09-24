@@ -362,26 +362,15 @@ export default typedMemo(function DataTable<D extends object>({
     >
       {hasGlobalControl ? (
         <div ref={globalControlRef} className="form-inline dt-controls">
-          <div className="row">
-            <div
-              className={renderTimeComparisonDropdown ? 'col-sm-5' : 'col-sm-6'}
-            >
-              {hasPagination ? (
-                <SelectPageSize
-                  total={resultsSize}
-                  current={resultCurrentPageSize}
-                  options={pageSizeOptions}
-                  selectRenderer={
-                    typeof selectPageSize === 'boolean'
-                      ? undefined
-                      : selectPageSize
-                  }
-                  onChange={setPageSize}
-                />
-              ) : null}
-            </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+          >
             {searchInput ? (
-              <div className="col-sm-6">
+              <div>
                 <GlobalFilter<D>
                   searchInput={
                     typeof searchInput === 'boolean' ? undefined : searchInput
@@ -404,16 +393,38 @@ export default typedMemo(function DataTable<D extends object>({
         </div>
       ) : null}
       {wrapStickyTable ? wrapStickyTable(renderTable) : renderTable()}
-      {hasPagination && resultPageCount > 1 ? (
-        <SimplePagination
-          ref={paginationRef}
-          style={paginationStyle}
-          maxPageItemCount={maxPageItemCount}
-          pageCount={resultPageCount}
-          currentPage={resultCurrentPage}
-          onPageChange={resultOnPageChange}
-        />
-      ) : null}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: '10px',
+        }}
+      >
+        <div>
+          {hasPagination ? (
+            <SelectPageSize
+              total={resultsSize}
+              current={resultCurrentPageSize}
+              options={pageSizeOptions}
+              selectRenderer={
+                typeof selectPageSize === 'boolean' ? undefined : selectPageSize
+              }
+              onChange={setPageSize}
+            />
+          ) : null}
+        </div>
+        {hasPagination && resultPageCount > 1 ? (
+          <SimplePagination
+            ref={paginationRef}
+            style={paginationStyle}
+            maxPageItemCount={maxPageItemCount}
+            pageCount={resultPageCount}
+            currentPage={resultCurrentPage}
+            onPageChange={resultOnPageChange}
+          />
+        ) : null}
+      </div>
     </div>
   );
 });

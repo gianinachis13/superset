@@ -91,14 +91,14 @@ const FiltersPanel = styled.div<{ width: number; hidden: boolean }>`
   grid-column: 1;
   grid-row: 1 / span 2;
   z-index: 11;
-  width: ${({ width }) => width}px;
+  width: 100%;
   ${({ hidden }) => hidden && `display: none;`}
 `;
 
 const StickyPanel = styled.div<{ width: number }>`
   position: sticky;
   top: -1px;
-  width: ${({ width }) => width}px;
+  width: 100%;
   flex: 0 0 ${({ width }) => width}px;
 `;
 
@@ -259,7 +259,6 @@ const DashboardContentWrapper = styled.div`
 
     & .dashboard-component-tabs-content {
       & > div:not(:last-child):not(.empty-droptarget) {
-        margin-bottom: ${theme.gridUnit * 4}px;
       }
 
       & > .empty-droptarget {
@@ -287,13 +286,26 @@ const DashboardContentWrapper = styled.div`
     margin-bottom: 30px;
     margin-left: auto;
 
-      .superset-button {
-    color: white;
-    border: none;
-    background-color: #070061 !important;
+    .superset-button {
+      color: white;
+      border: none;
+      background-color: #070061 !important;
+    }
   }
-  }
+  .btn-back {
+    span {
+      margin-left: 4px;
+    }
+    ,
+    .superset-button {
+      padding-left: 5px;
+      color: black;
+      font-size: 14px;
 
+      display: flex;
+      align-items: center;
+    }
+  }
 `;
 
 const StyledDashboardContent = styled.div<{
@@ -317,9 +329,9 @@ const StyledDashboardContent = styled.div<{
       width: 0;
       flex: 1;
       position: relative;
-      margin-top: ${theme.gridUnit * 6}px;
+      margin-top: 6px;
       margin-right: ${theme.gridUnit * 8}px;
-      margin-bottom: ${theme.gridUnit * 6}px;
+      margin-bottom: 6px;
       margin-left: ${marginLeft}px;
 
       ${editMode &&
@@ -604,14 +616,9 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
     );
   };
 
-  const CustomFilterHorizontal = ({p1, p2}:{p1:string, p2:string}) => {
-    return (
-      <div>
-        {p1}
-      </div>
-    )
-  }
-
+  const CustomFilterHorizontal = ({ p1, p2 }: { p1: string; p2: string }) => {
+    return <div>{p1}</div>;
+  };
 
   return (
     <DashboardWrapper>
@@ -634,13 +641,10 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                     width={filterBarWidth}
                     hidden={isReport}
                     data-test="dashboard-filters-panel"
-               
                   >
                     <StickyPanel ref={containerRef} width={filterBarWidth}>
                       <ErrorBoundary>
                         <FilterBar
-                        
-                       
                           orientation={FilterBarOrientation.Vertical}
                           verticalConfig={{
                             filtersOpen: dashboardFiltersOpen,
@@ -735,28 +739,70 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                   />
                 </div>
               ) : (
-                <DashboardContainer topLevelTabs={topLevelTabs} customFilterHorizontal={<CustomFilterHorizontal p1='test' p2='test2'></CustomFilterHorizontal>} />
+                <DashboardContainer
+                  topLevelTabs={topLevelTabs}
+                  // customFilterHorizontal={<CustomFilterHorizontal p1='test' p2='test2'></CustomFilterHorizontal>}
+                />
               )
             ) : (
               <Loading />
             )}
             {editMode && <BuilderComponentPane topOffset={barTopOffset} />}
           </StyledDashboardContent>
-          {
-            window.location.pathname.includes('17') && !editMode &&
+          {window.location.pathname.includes('17') && !editMode && (
             <div className="btn-container">
-            <Button
-              className="proceed-btn"
-              buttonStyle="tertiary"
-              onClick={handleClick}
-            >
-              {t('Drill to detail')}
-            </Button>
-          </div>
-          }
-          
+              <Button
+                className="proceed-btn"
+                buttonStyle="tertiary"
+                onClick={handleClick}
+              >
+                {t('Drill to detail')}
+              </Button>
+            </div>
+          )}
         </DashboardContentWrapper>
       </StyledContent>
+      {showFilterBar &&
+        filterBarOrientation === FilterBarOrientation.Vertical && (
+          <>
+            <ResizableSidebar
+              id={`dashboard:${dashboardId}`}
+              enable={dashboardFiltersOpen}
+              minWidth={OPEN_FILTER_BAR_WIDTH}
+              maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
+              initialWidth={OPEN_FILTER_BAR_WIDTH}
+            >
+              {adjustedWidth => {
+                const filterBarWidth = dashboardFiltersOpen
+                  ? adjustedWidth
+                  : CLOSED_FILTER_BAR_WIDTH;
+                return (
+                  <FiltersPanel
+                    width={filterBarWidth}
+                    hidden={isReport}
+                    data-test="dashboard-filters-panel"
+                  >
+                    <StickyPanel ref={containerRef} width={filterBarWidth}>
+                      <ErrorBoundary>
+                        <FilterBar
+                          orientation={FilterBarOrientation.Vertical}
+                          verticalConfig={{
+                            filtersOpen: dashboardFiltersOpen,
+                            toggleFiltersBar: toggleDashboardFiltersOpen,
+                            width: filterBarWidth,
+                            height: filterBarHeight,
+                            offset: filterBarOffset,
+                          }}
+                        />
+                      </ErrorBoundary>
+                    </StickyPanel>
+                  </FiltersPanel>
+                );
+              }}
+            </ResizableSidebar>
+          </>
+        )}
+
       {dashboardIsSaving && (
         <Loading
           css={css`

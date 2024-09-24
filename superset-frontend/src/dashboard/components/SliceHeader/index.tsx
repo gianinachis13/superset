@@ -175,7 +175,7 @@ const SliceHeader: FC<SliceHeaderProps> = ({
   useEffect(() => {
     const headerElement = headerRef.current;
     if (canExplore) {
-      setHeaderTooltip(getSliceHeaderTooltip(sliceName));
+      // setHeaderTooltip(getSliceHeaderTooltip(sliceName));
     } else if (
       headerElement &&
       (headerElement.scrollWidth > headerElement.offsetWidth ||

@@ -17,11 +17,13 @@
  * under the License.
  */
 import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import cx from 'classnames';
 import { css, styled, SupersetTheme, t } from '@superset-ui/core';
 import { Tooltip } from 'src/components/Tooltip';
 import CertifiedBadge from '../CertifiedBadge';
+import Button from '../Button';
+import { LeftOutlined } from '@ant-design/icons';
 
 export interface EditableTitleProps {
   canEdit?: boolean;
@@ -71,7 +73,7 @@ export default function EditableTitle({
   // Used so we can access the DOM element if a user clicks on this component.
 
   const contentRef = useRef<any | HTMLInputElement | HTMLTextAreaElement>();
-
+  const history = useHistory();
   useEffect(() => {
     if (title !== currentTitle) {
       setLastTitle(currentTitle);
@@ -157,6 +159,12 @@ export default function EditableTitle({
     }
   }
 
+  const handleClickBack = () => {
+    history.push(
+      `/superset/dashboard/17/?standalone=2&native_filters=(NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG:(__cache:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),extraFormData:(filters:!((col:country,op:IN,val:!('France','Romania')))),filterState:(label:!('France','Romania'),validateStatus:!f,value:!('France','Romania')),id:NATIVE_FILTER-x1b3wEnxslXDyY3LSzZzG,ownState:()),NATIVE_FILTER-mU1EeouOilfqaYJ_---ur:(__cache:(label:!('LAS'),validateStatus:!f,value:!('LAS')),extraFormData:(filters:!((col:gbu,op:IN,val:!('LAS')))),filterState:(label:!('LAS'),validateStatus:!f,value:!('LAS')),id:NATIVE_FILTER-mU1EeouOilfqaYJ_---ur,ownState:()),NATIVE_FILTER-N3WaSjc400SSFceV37xJy:(__cache:(label:!('VTS'),validateStatus:!f,value:!('VTS')),extraFormData:(filters:!((col:bl,op:IN,val:!('VTS')))),filterState:(label:!('VTS'),validateStatus:!f,value:!('VTS')),id:NATIVE_FILTER-N3WaSjc400SSFceV37xJy,ownState:()),NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9:(__cache:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),extraFormData:(filters:!((col:cc,op:IN,val:!('LAS/VTS-FR')))),filterState:(label:!('LAS/VTS-FR'),validateStatus:!f,value:!('LAS/VTS-FR')),id:NATIVE_FILTER-ielBenNOYeWF2yHt8A4E9,ownState:()))`,
+    );
+  };
+
   let value: string | undefined;
   value = currentTitle;
   if (!isEditing && !currentTitle) {
@@ -219,23 +227,36 @@ export default function EditableTitle({
   }
   if (!canEdit) {
     // don't actually want an input in this case
-    titleComponent = url ? (
-      <Link
-        to={url}
-        data-test="editable-title-input"
-        css={(theme: SupersetTheme) => css`
-          color: ${theme.colors.grayscale.dark1};
-          text-decoration: none;
-          :hover {
-            text-decoration: underline;
-          }
-          display: inline-block;
-        `}
+    titleComponent = (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'start',
+          alignItems: 'center',
+          position: 'absolute',
+          color: '#041295',
+          fontSize: '20px',
+        }}
       >
-        {value}
-      </Link>
-    ) : (
-      <span data-test="editable-title-input">{value}</span>
+        {window.location.pathname.includes('18') && (
+          <>
+           
+            <div className="btn-back">
+              <Button
+                className="proceed-btn"
+                buttonStyle="link"
+                onClick={handleClickBack}
+              >
+                <>
+                <LeftOutlined style={{ fontSize: '14px', color: 'black', padding: 0, marginRight: 0 }} />
+                </>
+                {t('Back')}
+              </Button>
+            </div>
+          </>
+        )}
+        <span data-test="editable-title-input">{value}</span>
+      </div>
     );
   }
   return (

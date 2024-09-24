@@ -59,7 +59,11 @@ const GridContent = styled.div`
 
     /* gutters between rows */
     & > div:not(:last-child):not(.empty-droptarget) {
-      ${!editMode && `margin-bottom: ${theme.gridUnit * 4}px`};
+
+    }
+
+    .dragdroppable .dashboard-chart-id-125 .editable-title:last-child   {
+      display: none
     }
 
     .empty-droptarget {

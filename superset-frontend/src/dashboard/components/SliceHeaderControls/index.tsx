@@ -741,7 +741,7 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
       forceSubMenuRender
       {...openKeysProps}
     >
-      <Menu.Item
+      {/* <Menu.Item
         key={MenuKeys.ForceRefresh}
         disabled={props.chartStatus === 'loading'}
         style={{ height: 'auto', lineHeight: 'initial' }}
@@ -751,13 +751,13 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
         <RefreshTooltip data-test="dashboard-slice-refresh-tooltip">
           {refreshTooltip}
         </RefreshTooltip>
-      </Menu.Item>
+      </Menu.Item> */}
 
       <Menu.Item key={MenuKeys.Fullscreen}>{fullscreenLabel}</Menu.Item>
 
       <Menu.Divider />
 
-      {slice.description && (
+      {/* {slice.description && (
         <Menu.Item key={MenuKeys.ToggleChartDescription}>
           {props.isDescriptionExpanded
             ? t('Hide chart description')
@@ -820,8 +820,8 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
             }
           />
         </Menu.Item>
-      )}
-
+      )} */}
+{/* 
       {isFeatureEnabled(FeatureFlag.DrillToDetail) && canDrillToDetail && (
         <DrillDetailMenuItems
           chartId={slice.slice_id}
@@ -833,9 +833,9 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
         />
       )}
 
-      {(slice.description || canExplore) && <Menu.Divider />}
+      {(slice.description || canExplore) && <Menu.Divider />} */}
 
-      {supersetCanShare && (
+      {/* {supersetCanShare && (
         <Menu.SubMenu
           title={t('Share')}
           key={MenuKeys.Share}
@@ -858,7 +858,7 @@ const SliceHeaderControls = (props: SliceHeaderControlsPropsWithRouter) => {
             )}
           />
         </Menu.SubMenu>
-      )}
+      )} */}
 
       {props.supersetCanCSV && (
         <Menu.SubMenu

@@ -175,15 +175,15 @@ function SortIcon<D extends object>({ column }: { column: ColumnInstance<D> }) {
   }
   return sortIcon;
 }
-
+let records;
 function SearchInput({ count, value, onChange }: SearchInputProps) {
+  records  = count;
   return (
     <span className="dt-global-filter">
-      {t('Search')}{' '}
       <input
         aria-label={t('Search %s records', count)}
         className="form-control input-sm"
-        placeholder={tn('search.num_records', count)}
+        placeholder={'Search'}
         value={value}
         onChange={onChange}
       />
@@ -224,6 +224,7 @@ function SelectPageSize({
         })}
       </select>{' '}
       {t('page_size.entries')}
+      <span style={{color: "#5D607E", marginLeft: "4px"}} >  |  {records} records</span>
     </span>
   );
 }
@@ -959,8 +960,9 @@ export default function TableChart<D extends DataRecord = DataRecord>(
             <div
               data-column-name={col.id}
               css={{
-                display: 'inline-flex',
-                alignItems: 'flex-end',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent:'space-between',
               }}
             >
               <span data-column-name={col.id}>{label}</span>

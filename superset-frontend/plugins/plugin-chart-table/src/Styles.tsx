@@ -34,10 +34,11 @@ export default styled.div`
     }
 
     thead > tr > th {
-      padding-right: 0;
       position: relative;
-      background: ${theme.colors.grayscale.light5};
+      // background: ${theme.colors.grayscale.light5};
+      background: #383A4B;
       text-align: left;
+      color: white;
     }
     th svg {
       color: ${theme.colors.grayscale.light2};
@@ -104,7 +105,6 @@ export default styled.div`
 
     .pagination > li > span.dt-pagination-ellipsis:focus,
     .pagination > li > span.dt-pagination-ellipsis:hover {
-      background: ${theme.colors.grayscale.light5};
     }
 
     .dt-no-results {

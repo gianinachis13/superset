@@ -104,6 +104,7 @@ const HorizontalFilterBar: FC<HorizontalBarProps> = ({
   filterValues,
   isInitialized,
   onSelectionChange,
+  isCustomHorizontal
 }) => {
   const dataMask = useSelector<RootState, DataMaskStateWithId>(
     state => state.dataMask,
@@ -132,35 +133,14 @@ const HorizontalFilterBar: FC<HorizontalBarProps> = ({
   return (
     <HorizontalBar {...getFilterBarTestId()}>
       <HorizontalBarContent>
-        {!isInitialized ? (
-          <Loading position="inline-centered" />
-        ) : (
-          <>
-            <FilterBarSettings />
-            {canEdit && (
-              <FiltersLinkContainer hasFilters={hasFilters}>
-                <FilterConfigurationLink
-                  dashboardId={dashboardId}
-                  createNewOnOpen={filterValues.length === 0}
-                >
-                  <Icons.PlusSmall /> {t('Add/Edit Filters')}
-                </FilterConfigurationLink>
-              </FiltersLinkContainer>
-            )}
-            {!hasFilters && (
-              <FilterBarEmptyStateContainer data-test="horizontal-filterbar-empty">
-                {t('No filters are currently added to this dashboard.')}
-              </FilterBarEmptyStateContainer>
-            )}
             {hasFilters && (
               <FilterControls
+                isCustomHorizontal={isCustomHorizontal}
                 dataMaskSelected={dataMaskSelected}
                 onFilterSelectionChange={onSelectionChange}
               />
             )}
             {actions}
-          </>
-        )}
       </HorizontalBarContent>
     </HorizontalBar>
   );
