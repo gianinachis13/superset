@@ -96,6 +96,10 @@ const VerticalDotsContainer = styled.div`
     margin: ${({ theme }) => theme.gridUnit / 2}px 0;
 
     background-color: ${({ theme }) => theme.colors.text.label};
+    position: relative;
+    top: 38px;
+    right: 25px;
+    margin-left: 5px;
   }
 
   &:hover {

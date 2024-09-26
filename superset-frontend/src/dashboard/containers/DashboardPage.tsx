@@ -195,7 +195,7 @@ export const DashboardPage: FC<PageProps> = ({ idOrSlug }: PageProps) => {
   if (!readyToRender || !hasDashboardInfoInitiated) return <Loading />;
 
   return (
-    <>
+    <div style={{overflow:"hidden"}}>
       <Global
         styles={[
           filterCardPopoverStyle(theme),
@@ -211,7 +211,7 @@ export const DashboardPage: FC<PageProps> = ({ idOrSlug }: PageProps) => {
           <DashboardBuilder />
         </DashboardContainer>
       </DashboardPageIdContext.Provider>
-    </>
+    </div>
   );
 };
 

@@ -83,6 +83,11 @@ const verticalStyle = (theme: SupersetTheme, width: number) => css`
 
   & > .filter-apply-button {
     margin-bottom: ${theme.gridUnit * 3}px;
+    background: #041295
+  }
+
+    & > .filter-apply-button:hover {
+    background: #041295
   }
 `;
 
@@ -97,7 +102,7 @@ const horizontalStyle = (theme: SupersetTheme) => css`
     &[disabled],
     &[disabled]:hover {
       color: ${theme.colors.grayscale.light1};
-      background: ${theme.colors.grayscale.light3};
+      background: #041295;
     }
   }
 `;

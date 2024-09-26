@@ -367,6 +367,7 @@ export default typedMemo(function DataTable<D extends object>({
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
+              marginRight: "35px"
             }}
           >
             {searchInput ? (

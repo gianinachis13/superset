@@ -89,7 +89,7 @@ type DashboardBuilderProps = {};
 
 // @z-index-above-dashboard-charts + 1 = 11
 const FiltersPanel = styled.div<{ width: number; hidden: boolean }>`
-  grid-column: 1;
+  grid-column: 3;
   grid-row: 1 / span 2;
   z-index: 11;
   width: 100%;
@@ -286,6 +286,7 @@ const DashboardContentWrapper = styled.div`
     margin-right: 30px;
     margin-bottom: 30px;
     margin-left: auto;
+    margin-top: 8px;
 
     .superset-button {
       color: white;
@@ -331,7 +332,7 @@ const StyledDashboardContent = styled.div<{
       width: 0;
       flex: 1;
       position: relative;
-      margin-top: 6px;
+      margin-top: 60px;
       margin-right: ${theme.gridUnit * 8}px;
       margin-bottom: 6px;
       margin-left: ${marginLeft}px;
@@ -618,52 +619,9 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
     );
   };
 
-  const CustomFilterHorizontal = ({ p1, p2 }: { p1: string; p2: string }) => {
-    return <div>{p1}</div>;
-  };
-
   return (
     <DashboardWrapper>
-      {showFilterBar &&
-        filterBarOrientation === FilterBarOrientation.Vertical && (
-          <>
-            <ResizableSidebar
-              id={`dashboard:${dashboardId}`}
-              enable={dashboardFiltersOpen}
-              minWidth={OPEN_FILTER_BAR_WIDTH}
-              maxWidth={OPEN_FILTER_BAR_MAX_WIDTH}
-              initialWidth={OPEN_FILTER_BAR_WIDTH}
-            >
-              {adjustedWidth => {
-                const filterBarWidth = dashboardFiltersOpen
-                  ? adjustedWidth
-                  : CLOSED_FILTER_BAR_WIDTH;
-                return (
-                  <FiltersPanel
-                    width={filterBarWidth}
-                    hidden={isReport}
-                    data-test="dashboard-filters-panel"
-                  >
-                    <StickyPanel ref={containerRef} width={filterBarWidth}>
-                      <ErrorBoundary>
-                        <FilterBar
-                          orientation={FilterBarOrientation.Vertical}
-                          verticalConfig={{
-                            filtersOpen: dashboardFiltersOpen,
-                            toggleFiltersBar: toggleDashboardFiltersOpen,
-                            width: filterBarWidth,
-                            height: filterBarHeight,
-                            offset: filterBarOffset,
-                          }}
-                        />
-                      </ErrorBoundary>
-                    </StickyPanel>
-                  </FiltersPanel>
-                );
-              }}
-            </ResizableSidebar>
-          </>
-        )}
+
       <StyledHeader ref={headerRef}>
         {/* @ts-ignore */}
         <Droppable
