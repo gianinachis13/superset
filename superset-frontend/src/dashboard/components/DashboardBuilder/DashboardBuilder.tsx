@@ -83,6 +83,7 @@ import { useNativeFilters } from './state';
 import DashboardWrapper from './DashboardWrapper';
 import Button from 'src/components/Button';
 import { useHistory } from 'react-router-dom';
+import DrillIcon from './DrillIcon';
 
 type DashboardBuilderProps = {};
 
@@ -289,7 +290,8 @@ const DashboardContentWrapper = styled.div`
     .superset-button {
       color: white;
       border: none;
-      background-color: #070061 !important;
+      background-color:  #041295 !important;
+      padding: 0px 5px 0px 10px
     }
   }
   .btn-back {
@@ -757,6 +759,7 @@ const DashboardBuilder: FC<DashboardBuilderProps> = () => {
                 onClick={handleClick}
               >
                 {t('Drill to detail')}
+                <DrillIcon/>
               </Button>
             </div>
           )}

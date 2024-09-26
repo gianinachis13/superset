@@ -625,8 +625,8 @@ EXTRA_CATEGORICAL_COLOR_SCHEMES = [
         "label": 'My Visualization Colors',
         "isDefault": True,
         "colors":
-         ['#178244', '#178244', '#E01E00']
-    }]
+         ['#178244','#E01E00']
+}]
 # This is merely a default
 # EXTRA_CATEGORICAL_COLOR_SCHEMES: list[dict[str, Any]] = []
 
